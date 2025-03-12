@@ -1,2 +1,1 @@
-# terraform-azure-ai-app-subscription
-Deploying an Azure AI Services Subscription using Terraform
+# Deploying an Azure AI Services Subscription using Terraform
