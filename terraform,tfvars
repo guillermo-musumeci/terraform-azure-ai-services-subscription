@@ -1,0 +1,59 @@
+## Common Variables ##
+app_name    = "aitest"
+environment = "dev"
+
+tags = {
+  "Application Name"  = "AI Test"
+  "Environment"       = "Dev"
+  "Version"           = "1.0"
+}
+
+## Azure Authentication ##
+azure-subscription-core-id     = "complete-this"
+azure-subscription-customer-id = "complete-this"
+azure-client-id                = "complete-this"
+azure-client-secret            = "complete-this"
+azure-tenant-id                = "complete-this"
+
+## Network ##
+location                = "Sweden Central"
+vnet-cidr               = "10.100.0.0/16"
+subnet-cidr             = "10.100.1.0/24"
+subnet-pe-cidr          = "10.100.2.0/24"
+subnet-appservices-cidr = "10.100.3.0/24"
+
+## Storage Account ##
+storage_public_network_access_enabled  = false
+storage_account_network_rules_ip_rules = []
+enable_hierarchical_namespace          = true
+blob_delete_retention_policy_days      = 0
+container_delete_retention_policy_days = 0
+
+## Azure AI ##
+azure_ai_sku                           = "standard"
+azure_ai_replica_count                 = 1
+azure_ai_partition_count               = 1
+azure_ai_allowed_ips                   = []
+azure_ai_public_network_access_enabled = false
+
+## Azure OpeanAI ##
+openai_custom_subdomain_name              = "kopicloud-aitest-dev"
+openai_public_network_access_enabled      = true
+openai_outbound_network_access_restricted = false
+openai_network_acls_default_action        = "Deny"
+openai_network_acls_ip_rules              = []
+openai_cognitive_deployment = [
+  {
+    name       = "gpt4o"
+    format     = "OpenAI"
+    type       = "gpt-4o"
+    version    = "2024-11-20"
+    scale_type = "GlobalStandard"
+    capacity   = 120
+  }
+]
+
+## Azure KeyVault ##
+kv_public_network_access_enabled = true
+kv_network_acls_default_action   = "Deny"
+kv_network_acls_ip_rules         = []
