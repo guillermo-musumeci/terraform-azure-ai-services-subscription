@@ -143,10 +143,12 @@ variable "azure_ai_allowed_ips" {
 ## Azure AI Search - Output ##
 ##############################
 
+## OUTPUT AI Search Name ##
 output "AI_Search_Name" {
   value = azurerm_search_service.this.name
 }
 
+## OUTPUT AI Search Key (Remove in PROD) ##
 output "AI_Search_Key" {
   value = nonsensitive(azurerm_search_service.this.primary_key)
 }
