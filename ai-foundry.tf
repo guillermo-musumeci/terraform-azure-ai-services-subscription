@@ -171,9 +171,9 @@ resource "azurerm_private_endpoint" "azureml_notebooks" {
   ]
 }
 
-#######################################################
-## Azure AI Foundry Service Connection - Permissions ##
-#######################################################
+#####################################################
+## Azure AI Foundry Service Connection - Resources ##
+#####################################################
 
 ## OpenAI Services Connection ##
 resource "azapi_resource" "openai_services_connection" {
@@ -267,7 +267,7 @@ data "azurerm_storage_account_sas" "this" {
   }
 }
 
-## Storage Account Services Connection at project ##
+## Storage Account Services Connection at Project ##
 resource "azapi_resource" "storage_account_services_connection_project" {
   type = "Microsoft.MachineLearningServices/workspaces/connections@2024-07-01-preview"
   name = "${azurerm_storage_account.this.name}project"
@@ -325,7 +325,7 @@ output "ai_project_id" {
   value       = azapi_resource.project.output.properties.workspaceId
 }
 
-## Output SAS Token ##
+## Output SAS Token (Remove in PROD) ##
 output "sas_token" {
   description = "Azure Storage SAS Token"
   value       = nonsensitive(data.azurerm_storage_account_sas.this.sas)
