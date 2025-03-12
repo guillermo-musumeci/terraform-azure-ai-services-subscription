@@ -60,6 +60,93 @@ resource "azurerm_subnet" "subnet-appservices" {
   }
 }
 
+# Create the NSG for the Subnet
+resource "azurerm_network_security_group" "core_services" {
+  name                = "${lower(var.app_name)}-${var.environment}-nsg"
+  resource_group_name = azurerm_resource_group.rg.name
+  location            = azurerm_resource_group.rg.location
+  
+  security_rule {
+     name                       = "Allow-HTTPS"
+     priority                   = 1000
+     direction                  = "Inbound"
+     access                     = "Allow"
+     protocol                   = "Tcp"
+     source_port_range          = "*"
+     destination_port_range     = "443"
+     source_address_prefix      = var.internal-source-address-cidr
+     destination_address_prefix = "*"
+  }
+
+  security_rule {
+     name                       = "Allow-HTTP"
+     priority                   = 1010
+     direction                  = "Inbound"
+     access                     = "Allow"
+     protocol                   = "Tcp"
+     source_port_range          = "*"
+     destination_port_range     = "80"
+     source_address_prefix      = var.internal-source-address-cidr
+     destination_address_prefix = "*"
+  }
+
+  security_rule {
+    name                       = "Allow-RDP"
+    priority                   = 1020
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "3389"
+    source_address_prefix      = var.internal-source-address-cidr
+    destination_address_prefix = "*"
+  }
+
+  security_rule {
+    name                       = "Allow-SSH"
+    priority                   = 1030
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "22"
+    source_address_prefix      = var.internal-source-address-cidr
+    destination_address_prefix = "*"
+  }
+
+  security_rule {
+     name                       = "Allow-ICMP"
+     priority                   = 1040
+     direction                  = "Inbound"
+     access                     = "Allow"
+     protocol                   = "Icmp"
+     source_port_range          = "*"
+     destination_port_range     = "*"
+     source_address_prefix      = var.internal-source-address-cidr
+     destination_address_prefix = "*"
+  }
+
+  tags = var.tags
+}
+
+# Attach NSG to Subnet
+resource "azurerm_subnet_network_security_group_association" "subnet" {
+  subnet_id                 = azurerm_subnet.subnet.id
+  network_security_group_id = azurerm_network_security_group.core_services.id
+}
+
+# Attach NSG to Private Endpoint Subnet
+resource "azurerm_subnet_network_security_group_association" "subnet_pe" {
+  subnet_id                 = azurerm_subnet.subnet-pe.id
+  network_security_group_id = azurerm_network_security_group.core_services.id
+}
+
+# Attach NSG to WebApp Subnet
+resource "azurerm_subnet_network_security_group_association" "subnet_appservices" {
+  subnet_id                 = azurerm_subnet.subnet-appservices.id
+  network_security_group_id = azurerm_network_security_group.core_services.id
+}
+
 #########################
 ## Network - Variables ##
 #########################
@@ -89,6 +176,12 @@ variable "subnet-pe-cidr" {
 variable "subnet-appservices-cidr" {
   type        = string
   description = "The CIDR for the App Services (Function/WebApp) subnet"
+}
+
+variable "internal-source-address-cidr" {
+  type        = string
+  description = "The CIDR for the internal network"
+  default     = "10.0.0.0/8"
 }
 
 ######################
