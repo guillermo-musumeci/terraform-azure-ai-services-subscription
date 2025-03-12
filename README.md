@@ -1,4 +1,4 @@
-# Deploying an Azure AI Services Subscription using Terraform
+# Deploying an Azure AI Services using Terraform
 [![Terraform](https://img.shields.io/badge/terraform-v1.11+-blue.svg)](https://www.terraform.io/downloads.html)
 
 ## Overview
